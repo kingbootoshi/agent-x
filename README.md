@@ -1,15 +1,10 @@
-# Cypher Core System Documentation
+# Cypher - An AI computer framework
 
-<img width="1728" alt="image (2)" src="https://github.com/user-attachments/assets/e353452f-5db0-4143-a309-b6a65335ba1d" />
+![nn6a2q79zf0CohxzQ_wW__4a0427cc13a74f4587edc4aa7d54614a](https://github.com/user-attachments/assets/14d0acc4-1ad8-436a-8682-9e8f4870a077)
 
 ## Introduction
 
-Cypher Core is a flexible and modular framework for building AI agents that can:
-
-- Chat naturally
-- Utilize external tools (function calling)
-- Produce structured JSON outputs validated by schemas
-- Operate continuously and autonomously (via `TerminalCore`), running commands and interacting with a "world" environment.
+Cypher Core is a flexible and modular framework for building AI agents that access the world via a computer interface. This allows agents to operate continuously and autonomously (via `TerminalCore`), running commands and interacting with a terminal environment.
 
 Agents are defined through YAML files rather than hard-coded configurations, making it easy to swap in your own agent definitions, tools, personalities, and features.
 
@@ -17,6 +12,10 @@ Agents are defined through YAML files rather than hard-coded configurations, mak
 1. To test built in implementations, add an anthropic ENV key
 2. Run `npm run test` and pick a test via CLI to play with the system
 3. To see agent terminal logs, open localhost:3000 in browser
+
+## TERMINAL
+Access the terminal during runs with localhost:3000
+<img width="1728" alt="image (2)" src="https://github.com/user-attachments/assets/e353452f-5db0-4143-a309-b6a65335ba1d" />
 
 ## Agent Configuration & Loading
 
