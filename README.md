@@ -4,7 +4,9 @@
 
 ## Introduction
 
-Cypher Core is a flexible and modular framework for building AI agents that access the world via a computer interface. This allows agents to operate continuously and autonomously (via `TerminalCore`), running commands and interacting with a terminal environment.
+Cypher is a flexible and modular framework for building AI agents that access the world via a computer interface. This allows agents to operate continuously and autonomously (via `TerminalCore`), running commands and interacting with a terminal environment.
+
+Cypher focuses on being a native bitcoin framework, allowing agents to freely interact with the Bitcoin blockchain and ecosystem on-chain.
 
 Agents are defined through YAML files rather than hard-coded configurations, making it easy to swap in your own agent definitions, tools, personalities, and features.
 
