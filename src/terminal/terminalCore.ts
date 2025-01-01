@@ -11,7 +11,7 @@ interface Feature {
 
 interface TerminalCoreOptions {
   agentName?: string;
-  modelType?: 'openai' | 'anthropic' | 'fireworks';
+  modelType?: 'openai' | 'anthropic' | 'fireworks' | 'local';
   modelName?: string;
   maxActions?: number;
   actionCooldownMs?: number;
@@ -57,6 +57,9 @@ export class TerminalCore extends EventEmitter {
 
     const agentName = this.options.agentName || "terminalAgent";
     this.agent = new Agent({ agentName });
+    if (this.options.modelType === 'local') {
+      await this.agent.initialize();
+    }
 
     Logger.info('TerminalCore initialized with agent and features');
   }

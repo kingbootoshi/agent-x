@@ -3,6 +3,7 @@ import { ModelAdapter, ProcessedResponse } from '../models/adapters/ModelAdapter
 import { OpenAIAdapter } from '../models/adapters/OpenAIAdapter';
 import { AnthropicAdapter } from '../models/adapters/AnthropicAdapter';
 import { FireworksAdapter } from '../models/adapters/FireworksAdapter';
+import { QwenAdapter } from '../models/adapters/QwenAdapter';
 import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 import { Logger } from '../utils/logger';
@@ -61,6 +62,9 @@ export class BaseAgent<T extends z.ZodTypeAny | null = null> {
       case 'fireworks':
         this.modelAdapter = new FireworksAdapter(modelClient.modelName);
         break;
+      case 'local':
+        this.modelAdapter = new QwenAdapter(modelClient.modelName);
+        break;
       default:
         throw new Error(`Unsupported model type: ${this.modelType}`);
     }
@@ -83,6 +87,22 @@ export class BaseAgent<T extends z.ZodTypeAny | null = null> {
     }
 
     this.runData = {};
+  }
+
+  public async initialize(): Promise<{ success: boolean; output: any; error?: string }> {
+    
+      try{
+        if (this.modelClient.initialize) {
+          const response = await this.modelClient.initialize();
+          Logger.debug('[BaseAgent] Model initialized:', response);
+          return { success: true, output: response };
+        } else {
+          return { success: true, output: 'Model does not need initialization'};
+        }
+      } catch (error) {
+        Logger.error('[BaseAgent] Model initialization failed:', error);
+        return { success: false, output: 'Model initialization failed', error: (error as Error).message };
+      } 
   }
 
   public setTools(tools: Tool[]) {
@@ -247,7 +267,7 @@ export class BaseAgent<T extends z.ZodTypeAny | null = null> {
       const updatedSystemPrompt = this.compileSystemPrompt(dynamicVariables);
       this.runData.systemPrompt = updatedSystemPrompt;
 
-      if (this.modelType === 'anthropic' && this.outputSchema && this.schemaJson && !hasTools && !this.hasInjectedSchema) {
+      if (this.modelType === 'anthropic' || this.modelType == 'local' && this.outputSchema && this.schemaJson && !hasTools && !this.hasInjectedSchema) {
         this.addAgentMessage(`Below is the JSON schema you must follow for the final answer:\n${JSON.stringify(this.schemaJson, null, 2)}\nYou must ONLY output JSON following this schema.`);
         this.hasInjectedSchema = true;
       }

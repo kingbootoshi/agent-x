@@ -3,6 +3,7 @@ import { loadAgentDefinition, loadAgentFromFile } from './agentsRegistry';
 import { OpenAIClient } from '../models/clients/OpenAiClient';
 import { AnthropicClient } from '../models/clients/AnthropicClient';
 import { FireworkClient } from '../models/clients/FireworkClient';
+import { QwenClient } from '../models/clients/QwenClient';
 import { ModelClient, Message, Tool, FunctionCall } from '../types/agentSystem';
 import * as z from 'zod';
 import { Logger } from '../utils/logger';
@@ -108,6 +109,11 @@ export class Agent {
         throw new Error('FIREWORKS_API_KEY not set');
       }
       modelClient = new FireworkClient(process.env.FIREWORKS_API_KEY, agentDef.model);
+    } else if (agentDef.client === 'local') {
+      if (!agentDef.model || !agentDef.dynamic_variables?.['server_url']) {
+        throw new Error('Model or server URL is missing in agent definition.');
+      }
+      modelClient = new QwenClient(agentDef.model, agentDef.dynamic_variables?.['server_url']);
     } else {
       throw new Error(`Unsupported model client: ${agentDef.client}`);
     }
@@ -139,6 +145,11 @@ export class Agent {
     } else {
       Logger.debug('[Agent] No tools defined for this agent.');
     }
+  }
+
+  public async initialize(): Promise<{success: boolean; output: any; error?: string; functionCalls?: FunctionCall[]}> {
+    const result = await this.agent.initialize();
+    return result;
   }
 
   public async run(userMessage?: string, dynamicVars?: { [key: string]: string }): Promise<{success: boolean; output: any; error?: string; functionCalls?: FunctionCall[]}> {
