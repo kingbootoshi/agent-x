@@ -11,7 +11,7 @@ interface Feature {
 
 interface TerminalCoreOptions {
   agentName?: string;
-  modelType?: 'openai' | 'anthropic' | 'fireworks';
+  modelType?: 'openai' | 'anthropic' | 'fireworks' | 'google';
   modelName?: string;
   maxActions?: number;
   actionCooldownMs?: number;

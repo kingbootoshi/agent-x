@@ -29,7 +29,7 @@ export interface Tool {
   };
 }
 
-export type ModelType = 'openai' | 'fireworks' | 'anthropic';
+export type ModelType = 'openai' | 'fireworks' | 'anthropic' | 'google';
 
 export interface ModelClient {
   modelType: ModelType;

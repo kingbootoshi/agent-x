@@ -3,6 +3,7 @@ import { ModelAdapter, ProcessedResponse } from '../models/adapters/ModelAdapter
 import { OpenAIAdapter } from '../models/adapters/OpenAIAdapter';
 import { AnthropicAdapter } from '../models/adapters/AnthropicAdapter';
 import { FireworksAdapter } from '../models/adapters/FireworksAdapter';
+import { AiStudioAdapter } from '../models/adapters/AiStudioAdapter';
 import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 import { Logger } from '../utils/logger';
@@ -60,6 +61,9 @@ export class BaseAgent<T extends z.ZodTypeAny | null = null> {
         break;
       case 'fireworks':
         this.modelAdapter = new FireworksAdapter(modelClient.modelName);
+        break;
+      case 'google':
+          this.modelAdapter = new AiStudioAdapter(modelClient.modelName);
         break;
       default:
         throw new Error(`Unsupported model type: ${this.modelType}`);

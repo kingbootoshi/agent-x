@@ -3,6 +3,8 @@ import { loadAgentDefinition, loadAgentFromFile } from './agentsRegistry';
 import { OpenAIClient } from '../models/clients/OpenAiClient';
 import { AnthropicClient } from '../models/clients/AnthropicClient';
 import { FireworkClient } from '../models/clients/FireworkClient';
+import { AiStudioClient } from '../models/clients/AiStudoClient';
+import { AiStudioAdapter } from '../models/adapters/AiStudioAdapter';
 import { ModelClient, Message, Tool, FunctionCall } from '../types/agentSystem';
 import * as z from 'zod';
 import { Logger } from '../utils/logger';
@@ -108,6 +110,11 @@ export class Agent {
         throw new Error('FIREWORKS_API_KEY not set');
       }
       modelClient = new FireworkClient(process.env.FIREWORKS_API_KEY, agentDef.model);
+    } else if (agentDef.client === 'google') {
+      if (!process.env.GEMINI_API_KEY) {
+        throw new Error('GEMINI_API_KEY not set');
+      }
+      modelClient = new AiStudioClient(process.env.GEMINI_API_KEY, agentDef.model);
     } else {
       throw new Error(`Unsupported model client: ${agentDef.client}`);
     }
